@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  shuffle-backend:
+    image: frikky/shuffle:latest
+    container_name: shuffle-backend
+    env_file:
+      - .env
+    ports:
+      - "5001:5001"
+      - "3443:3443"
+    depends_on:
+      - shuffle-database
+      - shuffle-opensearch
+    restart: unless-stopped
+
+  shuffle-database:
+    image: frikky/shuffle-database:latest
+    container_name: shuffle-database
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  shuffle-opensearch:
+    image: opensearchproject/opensearch:2.10.0
+    container_name: shuffle-opensearch
+    env_file:
+      - .env
+    environment:
+      - discovery.type=single-node
+      - plugins.security.disabled=true
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    restart: unless-stopped
