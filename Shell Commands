@@ -8,7 +8,7 @@ docker-compose --version
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo systemctl status docker
-sudo yum install git
+sudo yum install git -y
 git clone https://github.com/frikky/Shuffle
 cd Shuffle
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
