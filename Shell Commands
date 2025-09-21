@@ -21,8 +21,8 @@ sudo swapoff -a
 sudo docker restart shuffle-opensearch
 GET API KEY FROM ADMIN TAB
 vi .env 
-vi docker.compose.yml
 docker-compose up -d
 docker restart shuffle-opensearch
 docker logs -f shuffle-opensearch
+
 
