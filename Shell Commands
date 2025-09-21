@@ -15,8 +15,6 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 sudo docker-compose up -d
 sudo chown 1000:1000 -R shuffle-database 		
 sudo docker-compose restart
-sudo docker ps
-sudo docker logs <container-id> follow
 sudo swapoff -a
 sudo docker restart shuffle-opensearch
 GET API KEY FROM ADMIN TAB
