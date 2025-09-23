@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   frontend:
-    image: ghcr.io/shuffle/shuffle-frontend:latest
+    image: ghcr.io/shuffle/shuffle-frontend:nightly
     container_name: shuffle-frontend
     hostname: shuffle-frontend
     ports:
@@ -17,7 +15,7 @@ services:
       - backend
 
   backend:
-    image: ghcr.io/shuffle/shuffle-backend:latest
+    image: ghcr.io/shuffle/shuffle-backend:nightly
     container_name: shuffle-backend
     hostname: ${BACKEND_HOSTNAME}
     ports:
@@ -35,7 +33,7 @@ services:
     restart: unless-stopped
 
   orborus:
-    image: ghcr.io/shuffle/shuffle-orborus:latest
+    image: ghcr.io/shuffle/shuffle-orborus:nightly
     container_name: shuffle-orborus
     hostname: shuffle-orborus
     networks:
@@ -57,7 +55,7 @@ services:
       - SHUFFLE_LOGS_DISABLED=true
       - SHUFFLE_SWARM_CONFIG=run
       - CLEANUP=false
-      - SHUFFLE_WORKER_IMAGE=ghcr.io/shuffle/shuffle-worker:latest
+      - SHUFFLE_WORKER_IMAGE=ghcr.io/shuffle/shuffle-worker:nightly
     env_file: .env
     restart: unless-stopped
     security_opt:
@@ -93,36 +91,16 @@ services:
       - shuffle
     restart: unless-stopped
 
-  memcached:
-    image: memcached:latest
-    container_name: shuffle-cache
-    hostname: shuffle-cache
-    command: memcached -m 2048 -c 2500
-    environment:
-      - MEMCACHED_MEMORY=2048
-      - MEMCACHED_MAX_CONNECTIONS=2500
-    ports:
-      - 11211:11211
-    networks:
-      - shuffle
-    restart: unless-stopped
-
   worker:
-    image: ghcr.io/shuffle/shuffle-worker:latest
+    image: ghcr.io/shuffle/shuffle-worker:nightly
     container_name: shuffle-worker
     hostname: shuffle-worker
     environment:
       - SHUFFLE_OPENSEARCH_URL=http://shuffle-opensearch:9200
-      - SHUFFLE_BACKEND_HOST=http://shuffle-backend:5001
-      - SHUFFLE_MEMCACHED=shuffle-cache:11211
       - SHUFFLE_LOG_LEVEL=DEBUG
-      - AUTHORIZATION=${SHUFFLE_WORKER_AUTHORIZATION_KEY}
     networks:
       - shuffle
     restart: unless-stopped
-    depends_on:
-      - backend
-      - memcached
 
 volumes:
   shuffle-database:
